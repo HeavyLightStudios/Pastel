@@ -1,10 +1,21 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
-
-  <ItemGroup>
-    
-  </ItemGroup>
+﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.31">
+    <PropertyGroup>
+        <TargetFrameworks>Xamarin.iOS10;Xamarin.Mac20</TargetFrameworks>
+        <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="**\*.shared.cs" />
+        <Compile Include="**\*.shared.*.cs" />
+    </ItemGroup>
+    <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
+        <Compile Include="**\*.ios.cs" />
+        <Compile Include="**\*.ios.*.cs" />
+    </ItemGroup>
+    <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.Mac')) ">
+        <Compile Include="**\*.mac.cs" />
+        <Compile Include="**\*.mac.*.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Window\" />
+    </ItemGroup> 
 </Project>
