@@ -1,19 +1,31 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.31">
     <PropertyGroup>
-        <TargetFrameworks>Xamarin.iOS10;Xamarin.Mac20</TargetFrameworks>
+        <TargetFrameworks>NETStandard2.0;Xamarin.iOS10;Xamarin.Mac20</TargetFrameworks>
         <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+        <PackageVersion>0.0.2-alpha.1</PackageVersion>
+        <Authors>Heavy Light Studios</Authors>
+        <Title>Pastel</Title>
+        <Description>Pastel is a 2D Game engine</Description>
+        <PackageId>Pastel.Engine</PackageId>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="**\*.shared.cs" />
         <Compile Include="**\*.shared.*.cs" />
     </ItemGroup>
+    <ItemGroup Condition=" $(TargetFramework.StartsWith('NETStandard')) ">
+        <Compile Include="**\*.netstandard.cs" />
+        <Compile Include="**\*.netstandard.*.cs" />
+    </ItemGroup>
     <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
         <Compile Include="**\*.ios.cs" />
         <Compile Include="**\*.ios.*.cs" />
+        <Reference Include="Xamain.iOS" />
     </ItemGroup>
     <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.Mac')) ">
         <Compile Include="**\*.mac.cs" />
         <Compile Include="**\*.mac.*.cs" />
+        <Reference Include="Xamarin.Mac" />
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Window\" />

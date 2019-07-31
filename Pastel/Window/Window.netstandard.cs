@@ -1,11 +1,9 @@
 ﻿using System;
+
 namespace Pastel
 {
     public partial class Window
     {
-        public Window()
-        {
-            CreateWindow();
-        }
+        internal void CreateWindow() => throw new NotImplementedException();
     }
 }
