@@ -12,6 +12,7 @@
     <ItemGroup>
         <Compile Include="**\*.shared.cs" />
         <Compile Include="**\*.shared.*.cs" />
+        <Compile Include="Models\*.cs" />
     </ItemGroup>
     <ItemGroup Condition=" $(TargetFramework.StartsWith('NETStandard')) ">
         <Compile Include="**\*.netstandard.cs" />

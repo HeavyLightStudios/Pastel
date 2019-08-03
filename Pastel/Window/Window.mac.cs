@@ -6,20 +6,41 @@ namespace Pastel
 {
     public partial class Window
     {
+        private NSWindow _window;
+        
         internal void CreateWindow()
         {
-            var window = new NSWindow(new CGRect(
-                    NSScreen.MainScreen.Frame.GetMidX(),
-                    NSScreen.MainScreen.Frame.GetMidY(),1000,500), 
-                (NSWindowStyle.Titled | NSWindowStyle.Closable | NSWindowStyle.Miniaturizable | NSWindowStyle.Resizable), 
-                NSBackingStore.Buffered, false);
+            if (Fullscreen)
+            {
+                var frame = NSScreen.MainScreen.Frame;
+                
+                _window = new NSWindow(frame, NSWindowStyle.Borderless, 
+                    NSBackingStore.Buffered, false);
+                
+                _window.Level = NSWindowLevel.MainMenu + 1;
+            }
+            else
+            {
+                _window = new NSWindow(new CGRect(100,100, _screenSize.Width, _screenSize.Height), 
+                    (NSWindowStyle.Titled | NSWindowStyle.Closable | NSWindowStyle.Miniaturizable), 
+                    NSBackingStore.Buffered, false);
+                
+                _window.Title = Title;
+            }
             
             
-            window.AwakeFromNib();
-            window.Center();
-            window.MakeKeyAndOrderFront(null);
+            _window.AwakeFromNib();
+            _window.Center();
+            _window.MakeKeyAndOrderFront(null);
+        }
+
+        internal void ChangeScreenSize()
+        {
+            var frame = _window.Frame;
+            frame.Size = new CGSize(_screenSize.Width, _screenSize.Height);
             
-            Console.WriteLine("Hello from MacOS");
+            _window.SetFrame(frame, true);
+            _window.Center();
         }
     }
 }

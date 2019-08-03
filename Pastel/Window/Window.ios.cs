@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using UIKit;
 using CoreGraphics;
 
@@ -15,6 +16,7 @@ namespace Pastel
                 NSWindowStyle.Borderless, NSBackingStore.Buffered, false);
 
             window.Title = "Test Window";
+            
             window.IsOpaque = false;
             window.Center();
             window.MovableByWindowBackground = true;
