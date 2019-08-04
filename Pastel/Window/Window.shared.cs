@@ -6,9 +6,19 @@ namespace Pastel
     public partial class Window
     {
         private ScreenSize _screenSize;
+        private bool _fullScreen;
         
         public string Title { get; set; }
-        public bool Fullscreen { get; set; }
+
+        public bool Fullscreen
+        {
+            get => _fullScreen;
+            set
+            {
+                _fullScreen = value;
+                ChangeFullScreen();
+            }
+        }
 
         public ScreenSize ScreenSize
         {
@@ -23,7 +33,7 @@ namespace Pastel
         public Window(ScreenSize screenSize, bool fullscreen = true, string title = "")
         {
             _screenSize = screenSize;
-            Fullscreen = fullscreen;
+            _fullScreen = fullscreen;
             Title = title;
             
             CreateWindow();

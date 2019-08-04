@@ -7,7 +7,6 @@ namespace Pastel.Test
         public Game()
         {
             var window = new Window(new ScreenSize(100,100));
-            
         }
     }
 }
