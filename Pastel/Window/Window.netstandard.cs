@@ -6,5 +6,6 @@ namespace Pastel
     {
         internal void CreateWindow() => throw new NotImplementedException();
         internal void ChangeScreenSize() => throw new NotImplementedException();
+        internal void ChangeFullScreen() => throw new NotImplementedException();
     }
 }

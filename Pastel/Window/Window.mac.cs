@@ -14,10 +14,10 @@ namespace Pastel
             {
                 var frame = NSScreen.MainScreen.Frame;
                 
-                _window = new NSWindow(frame, NSWindowStyle.Borderless, 
+                _window = new NSWindow(frame, NSWindowStyle.FullScreenWindow, 
                     NSBackingStore.Buffered, false);
                 
-                _window.Level = NSWindowLevel.MainMenu + 1;
+                _window.Level = NSWindowLevel.ScreenSaver - 1;
             }
             else
             {
@@ -41,6 +41,28 @@ namespace Pastel
             
             _window.SetFrame(frame, true);
             _window.Center();
+        }
+
+        internal void ChangeFullScreen()
+        {
+            if (_fullScreen)
+            {
+                var frame = NSScreen.MainScreen.Frame;
+                _window.StyleMask = NSWindowStyle.FullScreenWindow;
+                _window.SetFrame(frame, true);
+                
+                _window.MakeMainWindow();
+                
+            }
+            else
+            {
+                var frame = _window.Frame;
+                frame.Size = new CGSize(_screenSize.Width, _screenSize.Height);
+
+                _window.StyleMask = NSWindowStyle.Titled | NSWindowStyle.Closable | NSWindowStyle.Miniaturizable;
+                _window.SetFrame(frame, true);
+                _window.Center();
+            }
         }
     }
 }
