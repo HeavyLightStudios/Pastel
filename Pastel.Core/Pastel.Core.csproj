@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageVersion>0.0.1</PackageVersion>
+        <Title>Pastel Core</Title>
+        <Authors>Heavy Light Studios</Authors>
+        <RootNamespace>Pastel</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MonoGame.Framework.Portable" Version="3.7.1.189" />
+    </ItemGroup>
+
+</Project>
