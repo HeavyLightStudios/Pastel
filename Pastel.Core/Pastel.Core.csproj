@@ -1,0 +1,16 @@
+<Project Sdk="MSBuild.Sdk.Extras/2.0.41">
+
+    <PropertyGroup>
+        <TargetFrameworks>Xamarin.Mac20</TargetFrameworks>
+        <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="**\*.shared.cs" />
+        <Compile Include="**\*.shared.*.cs" />
+    </ItemGroup>
+    <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.Mac')) ">
+        <Compile Include="**\*.mac.cs" />
+        <Compile Include="**\*.mac.*.cs" />
+    </ItemGroup>
+</Project>
