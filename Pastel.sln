@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pastel", "Pastel\Pastel.csproj", "{369C5A57-6CD2-4DD4-B88C-557F467629F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pastel.Test.MacOS", "Pastel.Test.MacOS\Pastel.Test.MacOS.csproj", "{A86040EE-3A3E-4933-AAE8-6B90F74D896F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pastel.Test", "Pastel.Test\Pastel.Test.csproj", "{1E85CFC9-6D95-4248-A9B7-108C90D8FCE5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pastel.Core", "Pastel.Core\Pastel.Core.csproj", "{8FE73D06-2AA1-48CE-B0FE-2F6EA7A0C3B4}"
 EndProject
 Global
@@ -19,14 +15,6 @@ Global
 		{369C5A57-6CD2-4DD4-B88C-557F467629F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{369C5A57-6CD2-4DD4-B88C-557F467629F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{369C5A57-6CD2-4DD4-B88C-557F467629F1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A86040EE-3A3E-4933-AAE8-6B90F74D896F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A86040EE-3A3E-4933-AAE8-6B90F74D896F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A86040EE-3A3E-4933-AAE8-6B90F74D896F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A86040EE-3A3E-4933-AAE8-6B90F74D896F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1E85CFC9-6D95-4248-A9B7-108C90D8FCE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E85CFC9-6D95-4248-A9B7-108C90D8FCE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1E85CFC9-6D95-4248-A9B7-108C90D8FCE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1E85CFC9-6D95-4248-A9B7-108C90D8FCE5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8FE73D06-2AA1-48CE-B0FE-2F6EA7A0C3B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8FE73D06-2AA1-48CE-B0FE-2F6EA7A0C3B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FE73D06-2AA1-48CE-B0FE-2F6EA7A0C3B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
