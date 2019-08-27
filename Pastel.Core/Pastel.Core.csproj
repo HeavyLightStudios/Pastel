@@ -1,16 +1,24 @@
 <Project Sdk="MSBuild.Sdk.Extras/2.0.41">
 
     <PropertyGroup>
-        <TargetFrameworks>Xamarin.Mac20</TargetFrameworks>
+        <TargetFrameworks>NetStandard2.0;Xamarin.Mac20</TargetFrameworks>
         <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+        <Product>$(AssemblyName) ($(TargetFramework))</Product>
     </PropertyGroup>
-
+    <PropertyGroup>
+        <!-- As Default Compile items is off, exclusion of files need to be added to allow wildcard .cs files to be compiled --> 
+        <PlatformSpecificExclude>Platform\**</PlatformSpecificExclude>
+        <PlatformSpecificExclude>$(PlatformSpecificExclude);obj\**</PlatformSpecificExclude>
+        <PlatformSpecificExclude>$(PlatformSpecificExclude);bin\**</PlatformSpecificExclude>
+    </PropertyGroup>
     <ItemGroup>
-        <Compile Include="**\*.shared.cs" />
-        <Compile Include="**\*.shared.*.cs" />
+        <Compile Include="**\*.cs" Exclude="$(PlatformSpecificExclude)" />
+        <Compile Include="Platform\**\*.shared.cs" />
     </ItemGroup>
-    <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.Mac')) ">
-        <Compile Include="**\*.mac.cs" />
-        <Compile Include="**\*.mac.*.cs" />
+    <ItemGroup Condition="$(TargetFramework.StartsWith('Xamarin.Mac')) ">
+        <Compile Include="Platform\**\*.mac.cs" />
+    </ItemGroup>
+    <ItemGroup Condition="$(TargetFramework.StartsWith('NetStandard')) ">
+        <Compile Include="Platform\**\*.netstandard.cs" />
     </ItemGroup>
 </Project>
