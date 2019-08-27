@@ -14,6 +14,15 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- task: MSBuild@1
+  inputs:
+    solution: '**/*.sln'
+    msbuildArchitecture: 'x64'
+    msbuildArguments: '/restore'
+- task: DotNetCoreInstaller@1
+  inputs:
+    packageType: 'sdk'
+    version: '2.2.401'
 - task: DotNetCoreInstaller@1 
   inputs:
     version: '2.2.401'
@@ -23,7 +32,7 @@ steps:
     command: build
     projects: '**/*.csproj'
     arguments: '--configuration Release'
-- script: dotnet pack /p:PackageVersion=1.0.0-CI_$(Date:yyyyMMdd)-$(Rev:.r)
+- script: dotnet pack /p:PackageVersion=1.0.0-CI_$(Date:yyyyMMdd)-$(Rev:.r) --no-restore
 - task: NuGetCommand@2
   inputs:
     command: push
