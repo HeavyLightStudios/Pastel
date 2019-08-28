@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <TargetFrameworks>NetStandard2.0;Xamarin.Mac20</TargetFrameworks>
+        <PackageId>Pastel.Core</PackageId>
         <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-        <Product>$(AssemblyName) ($(TargetFramework))</Product>
     </PropertyGroup>
     <PropertyGroup>
         <!-- As Default Compile items is off, exclusion of files need to be added to allow wildcard .cs files to be compiled --> 
