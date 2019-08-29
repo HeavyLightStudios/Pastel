@@ -14,16 +14,20 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- task: NuGetCommand@2
+  inputs:
+    command: 'restore'
+    restoreSolution: '**/*.sln'
+    feedsToUse: 'select'
 - task: MSBuild@1
   inputs:
     solution: '**/*.sln'
-    msbuildArchitecture: 'x64'
-- task: DotNetCoreInstaller@1
+- task: NuGetCommand@2
   inputs:
-    command: push
-    nuGetFeedType: external
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'external'
     publishFeedCredentials: 'MyGet_HeavyLightStudios'
-    versioningScheme: byEnvVar
-    versionEnvVar: version
+
 
 
