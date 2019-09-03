@@ -1,5 +1,5 @@
-using Pastel.Core.Window;
 using Veldrid;
+using Pastel.Core.Platform.Window;
 
 namespace Pastel.Core.Platform.Graphics
 {
@@ -9,6 +9,5 @@ namespace Pastel.Core.Platform.Graphics
         {
             return CreateGraphicsdevice(new GraphicsDeviceOptions(), window);
         }
-        
     }
 }

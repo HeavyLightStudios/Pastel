@@ -2,13 +2,12 @@ using System;
 using AppKit;
 using CoreGraphics;
 
-namespace Pastel.Core.Window
+namespace Pastel.Core.Platform.Window
 {
     public partial class PastelWindow
     {
         private NSWindow _window;
-        public IntPtr windowHandle;
-        public bool Exists;
+        public IntPtr Handle;
         public event EventHandler WindowWillClose = delegate { };
 
         internal void CreateWindow()
@@ -27,13 +26,12 @@ namespace Pastel.Core.Window
                 _window = new NSWindow(new CGRect(100, 100, _screenSize.Width, _screenSize.Height),
                     (NSWindowStyle.Titled | NSWindowStyle.Closable | NSWindowStyle.Miniaturizable | NSWindowStyle.Resizable), 
                     NSBackingStore.Buffered, false);
-                
-                _window.Title = _title;
             }
 
+            Handle = _window.Handle;
+            
+            _window.Title = _title;
             _window.WillClose += internalClose;
-
-            windowHandle = _window.Handle;
             _window.AwakeFromNib();
             _window.Center();
             _window.MakeKeyAndOrderFront(null);
@@ -41,7 +39,6 @@ namespace Pastel.Core.Window
 
         private void internalClose(object sender, EventArgs e)
         {
-            Exists = false;
             WindowWillClose(this, e);
         }
 

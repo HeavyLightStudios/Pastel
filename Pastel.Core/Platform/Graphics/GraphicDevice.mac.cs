@@ -1,28 +1,29 @@
 using System;
 using System.Runtime.InteropServices;
-using Pastel.Core.Window;
 using Veldrid;
+using Pastel.Core.Platform.Window;
 
 namespace Pastel.Core.Platform.Graphics
 {
     public partial class GraphicDevice
     {
-        internal unsafe GraphicsDevice CreateGraphicsdevice(GraphicsDeviceOptions options, PastelWindow window)
+        internal GraphicsDevice CreateGraphicsdevice(GraphicsDeviceOptions options, PastelWindow window)
         {
             var swapChainSource = getSwapchainSource(window);
-            var swapchainDesc = new SwapchainDescription(
+            var swapchainDescription = new SwapchainDescription(
                 swapChainSource,
                 (uint)window.ScreenSize.Width, (uint)window.ScreenSize.Height,
                 options.SwapchainDepthFormat,
                 options.SyncToVerticalBlank,
                 false);
             
-            return GraphicsDevice.CreateMetal(options, swapchainDesc);
+            return GraphicsDevice.CreateMetal(options, swapchainDescription);
+            //TODO: Add OpenGL Graphic Device & check GraphicDevice.IsBackendSupported
         }
 
-        internal unsafe SwapchainSource getSwapchainSource(PastelWindow pastelWindow)
+        private SwapchainSource getSwapchainSource(PastelWindow pastelWindow)
         {
-            return SwapchainSource.CreateNSWindow(pastelWindow.windowHandle);
+            return SwapchainSource.CreateNSWindow(pastelWindow.Handle);
         }
     }
 }
