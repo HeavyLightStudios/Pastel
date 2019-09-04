@@ -7,6 +7,7 @@ namespace Pastel.Core.Platform.Window
         private ScreenSize _screenSize;
         private bool _fullscreen;
         private string _title;
+        public bool Running { get; set; }
         
         public bool Fullscreen
         {
