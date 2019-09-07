@@ -72,10 +72,5 @@ namespace Pastel.Core.Platform.Window
                 _window.Center();
             }
         }
-
-        public void RunEvents()
-        {
-            Console.WriteLine("loop");
-        }
     }
 }
