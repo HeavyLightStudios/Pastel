@@ -20,6 +20,8 @@ namespace Pastel.Core.Models
         private static DeviceBuffer _indexBuffer;
         private static Shader[] _shaders;
         private static Pipeline _pipeline;
+        private static VertexPositionColor[] quadVertices;
+        private static ushort[] quadIndices;
         
         private const string VertexCode = @"
 #version 450
@@ -54,26 +56,13 @@ void main()
             _graphicsDevice = pastelGD.Create(_window);
         }
         
-        private void CreateResources(RgbaFloat colour1, RgbaFloat colour2, RgbaFloat colour3, RgbaFloat colour4)
+        private void CreateResources()
         {
             var factory = _graphicsDevice.ResourceFactory;
-
-            VertexPositionColor[] quadVertices =
-            {
-                new VertexPositionColor(new Vector2(-.75f, .75f), colour1),
-                new VertexPositionColor(new Vector2(.75f, .75f), colour2),
-                new VertexPositionColor(new Vector2(-.75f, -.75f), colour3),
-                new VertexPositionColor(new Vector2(.75f, -.75f), colour4)
-            };
-            
-            ushort[] quadIndices = { 0, 1, 2, 3 };
             
             _vertexBuffer = factory.CreateBuffer(new BufferDescription(4 * VertexPositionColor.SizeInBytes, BufferUsage.VertexBuffer));
             _indexBuffer = factory.CreateBuffer(new BufferDescription(4 * sizeof(ushort), BufferUsage.IndexBuffer));
-            
-            _graphicsDevice.UpdateBuffer(_vertexBuffer, 0, quadVertices);
-            _graphicsDevice.UpdateBuffer(_indexBuffer, 0, quadIndices);
-            
+
             VertexLayoutDescription vertexLayout = new VertexLayoutDescription(
                 new VertexElementDescription("Position", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float2),
                 new VertexElementDescription("Color", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float4));
@@ -118,9 +107,23 @@ void main()
             _commandList = factory.CreateCommandList();
         }
 
-        private void Draw()
+        private void Draw(RgbaFloat colour1, RgbaFloat colour2, RgbaFloat colour3, RgbaFloat colour4)
         {
             Console.WriteLine("Drawing");
+            
+            quadVertices = new []
+            {
+                new VertexPositionColor(new Vector2(-.75f, .75f), colour1),
+                new VertexPositionColor(new Vector2(.75f, .75f), colour2),
+                new VertexPositionColor(new Vector2(-.75f, -.75f), colour3),
+                new VertexPositionColor(new Vector2(.75f, -.75f), colour4)
+            };
+            
+            quadIndices = new ushort[] { 0, 1, 2, 3 };
+            
+            _graphicsDevice.UpdateBuffer(_vertexBuffer, 0, quadVertices);
+            _graphicsDevice.UpdateBuffer(_indexBuffer, 0, quadIndices);
+            
             _commandList.Begin();
             _commandList.SetFramebuffer(_graphicsDevice.SwapchainFramebuffer);
             _commandList.ClearColorTarget(0, RgbaFloat.Black);
@@ -146,17 +149,19 @@ void main()
             var red = 0;
             var green = 0;
             var blue = 0;
+            
+            CreateResources();
 
             var task = Task.Run(async () =>
             {
                 while (true)
                 {
 
-                    CreateResources(new RgbaFloat(red / 64f, green / 64f, blue / 64f, 1f), 
+                    
+                    Draw(new RgbaFloat(red / 64f, green / 64f, blue / 64f, 1f), 
                         new RgbaFloat(red / 64f, blue / 64f, green / 64f, 1f), 
                         new RgbaFloat(green / 64f, blue / 64f, red / 64f, 1f), 
                         new RgbaFloat(blue / 64f, red / 64f, green / 64f, 1f));
-                    Draw();
                     
                     token.ThrowIfCancellationRequested();
                     
