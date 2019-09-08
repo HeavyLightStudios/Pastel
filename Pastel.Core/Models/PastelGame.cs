@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using OpenTK;
 using Pastel.Core.Platform.Graphics;
 using Pastel.Core.Platform.Window;
@@ -42,28 +45,25 @@ void main()
 {
     fsout_Color = fsin_Color;
 }";
-        
+
         public PastelGame()
         {
             _window = new PastelWindow();
-            _window.Create();
-            
+
             var pastelGD = new GraphicDevice();
             _graphicsDevice = pastelGD.Create(_window);
-            
-            CreateResources();
         }
         
-        private void CreateResources()
+        private void CreateResources(RgbaFloat colour1, RgbaFloat colour2, RgbaFloat colour3, RgbaFloat colour4)
         {
             var factory = _graphicsDevice.ResourceFactory;
 
             VertexPositionColor[] quadVertices =
             {
-                new VertexPositionColor(new Vector2(-.75f, .75f), RgbaFloat.Red),
-                new VertexPositionColor(new Vector2(.75f, .75f), new RgbaFloat(0.549f, 0.078f, 0.988f, 1f)),
-                new VertexPositionColor(new Vector2(-.75f, -.75f), RgbaFloat.Blue),
-                new VertexPositionColor(new Vector2(.75f, -.75f), RgbaFloat.Yellow)
+                new VertexPositionColor(new Vector2(-.75f, .75f), colour1),
+                new VertexPositionColor(new Vector2(.75f, .75f), colour2),
+                new VertexPositionColor(new Vector2(-.75f, -.75f), colour3),
+                new VertexPositionColor(new Vector2(.75f, -.75f), colour4)
             };
             
             ushort[] quadIndices = { 0, 1, 2, 3 };
@@ -140,9 +140,56 @@ void main()
         
         public void Run()
         {
-            _window.Running = true;
+            var tokenSource = new CancellationTokenSource();
+            CancellationToken token = tokenSource.Token;
             
-                Draw();
+            var red = 0;
+            var green = 0;
+            var blue = 0;
+
+            var task = Task.Run(async () =>
+            {
+                while (true)
+                {
+
+                    CreateResources(new RgbaFloat(red / 64f, green / 64f, blue / 64f, 1f), 
+                        new RgbaFloat(red / 64f, blue / 64f, green / 64f, 1f), 
+                        new RgbaFloat(green / 64f, blue / 64f, red / 64f, 1f), 
+                        new RgbaFloat(blue / 64f, red / 64f, green / 64f, 1f));
+                    Draw();
+                    
+                    token.ThrowIfCancellationRequested();
+                    
+                    if (red == 64)
+                    {
+                        if (green == 64)
+                        {
+                            if (blue == 64)
+                            {
+                                red = 0;
+                                green = 0;
+                                blue = 0;
+                            }
+                            else
+                            {
+                                blue += 1;
+                            }
+                        }
+                        else
+                        {
+                            green += 1;
+                        }
+                    }
+                    else
+                    {
+                        red += 1;
+                    }
+                    
+                    
+                    await Task.Delay(16); // 60 Frames a second
+                }
+            }, token);
+            
         }
 
         public void Dispose()

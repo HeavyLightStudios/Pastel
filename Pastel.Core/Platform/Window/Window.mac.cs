@@ -1,54 +1,62 @@
 using System;
+using System.Threading;
 using AppKit;
 using CoreGraphics;
+using Foundation;
+using Pastel.Core.Models;
 
 namespace Pastel.Core.Platform.Window
 {
-    public partial class PastelWindow
+    public partial class PastelWindow: NSWindow
     {
-        private NSWindow _window;
-        public IntPtr Handle;
-        public event EventHandler WindowWillClose = delegate { };
+        public PastelWindow(IntPtr handle) : base (handle)
+        {
+        }
+        
+        [Export ("initWithCoder:")]
+        public PastelWindow (NSCoder coder) : base (coder)
+        {
+        }
+
+        public PastelWindow(CGRect contentRect, NSWindowStyle aStyle, NSBackingStore bufferingType, bool deferCreation) :
+            base(contentRect, aStyle, bufferingType, deferCreation)
+        {
+            ContentView = new NSView(Frame);
+        }
 
         internal void CreateWindow()
         {
-            if (Fullscreen)
-            {
-                var frame = NSScreen.MainScreen.Frame;
-
-                _window = new NSWindow(frame, NSWindowStyle.FullScreenWindow,
-                    NSBackingStore.Buffered, false);
-
-                _window.Level = NSWindowLevel.ScreenSaver - 1;
-            }
-            else
-            {
-                _window = new NSWindow(new CGRect(100, 100, _screenSize.Width, _screenSize.Height),
-                    (NSWindowStyle.Titled | NSWindowStyle.Closable | NSWindowStyle.Miniaturizable | NSWindowStyle.Resizable), 
-                    NSBackingStore.Buffered, false);
-            }
-
-            Handle = _window.Handle;
+            var frame = Frame;
+            frame.Size = new CGSize(_screenSize.Width, _screenSize.Height);
             
-            _window.Title = _title;
-            _window.WillClose += internalClose;
-            _window.AwakeFromNib();
-            _window.Center();
-            _window.MakeKeyAndOrderFront(null);
+            SetFrame(frame, true);
+            
+            ContentView = new NSView(Frame);
+
+            StyleMask = NSWindowStyle.Titled | NSWindowStyle.Closable | NSWindowStyle.Miniaturizable |
+                        NSWindowStyle.Resizable;
+            BackingType = NSBackingStore.Buffered;
+
+            Title = _title;
+            
+            var windowController = new WindowViewController(this, _screenSize);
+            windowController.Window.Center();
+            windowController.Window.MakeKeyAndOrderFront (this);
         }
 
-        private void internalClose(object sender, EventArgs e)
+        public override void MakeKeyAndOrderFront(NSObject sender)
         {
-            WindowWillClose(this, e);
+            base.MakeKeyAndOrderFront(sender);
+            Console.WriteLine("Here");
         }
 
         internal void ChangeScreenSize()
         {
-            var frame = _window.Frame;
+            var frame = Frame;
             frame.Size = new CGSize(_screenSize.Width, _screenSize.Height);
             
-            _window.SetFrame(frame, true);
-            _window.Center();
+            SetFrame(frame, true);
+            Center();
         }
 
         internal void ChangeFullScreen()
@@ -56,20 +64,20 @@ namespace Pastel.Core.Platform.Window
             if (_fullscreen)
             {
                 var frame = NSScreen.MainScreen.Frame;
-                _window.StyleMask = NSWindowStyle.FullScreenWindow;
-                _window.SetFrame(frame, true);
+                StyleMask = NSWindowStyle.FullScreenWindow;
+                SetFrame(frame, true);
                 
-                _window.MakeMainWindow();
+                MakeMainWindow();
                 
             }
             else
             {
-                var frame = _window.Frame;
+                var frame = Frame;
                 frame.Size = new CGSize(_screenSize.Width, _screenSize.Height);
 
-                _window.StyleMask = NSWindowStyle.Titled | NSWindowStyle.Closable | NSWindowStyle.Miniaturizable;
-                _window.SetFrame(frame, true);
-                _window.Center();
+                StyleMask = NSWindowStyle.Titled | NSWindowStyle.Closable | NSWindowStyle.Miniaturizable;
+                SetFrame(frame, true);
+                Center();
             }
         }
     }

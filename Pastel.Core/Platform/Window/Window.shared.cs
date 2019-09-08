@@ -7,7 +7,6 @@ namespace Pastel.Core.Platform.Window
         private ScreenSize _screenSize;
         private bool _fullscreen;
         private string _title;
-        public bool Running { get; set; }
         
         public bool Fullscreen
         {
@@ -33,13 +32,17 @@ namespace Pastel.Core.Platform.Window
             _screenSize = new ScreenSize(1280, 720);
             _title = "Pastel";
             _fullscreen = false;
+            
+            CreateWindow();
         }
-        
+
         public PastelWindow(ScreenSize screenSize)
         {
             _screenSize = screenSize;
             _title = "Pastel";
             _fullscreen = false;
+            
+            CreateWindow();
         }
         
         public PastelWindow(ScreenSize screenSize, string title)
@@ -47,6 +50,8 @@ namespace Pastel.Core.Platform.Window
             _screenSize = screenSize;
             _title = title;
             _fullscreen = false;
+            
+            CreateWindow();
         }
 
         public PastelWindow(ScreenSize screenSize, string title, bool fullscreen)
@@ -54,6 +59,8 @@ namespace Pastel.Core.Platform.Window
             _screenSize = screenSize;
             _title = title;
             _fullscreen = fullscreen;
+            
+            CreateWindow();
         }
 
         public void Create()
