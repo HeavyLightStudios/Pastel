@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -109,8 +110,6 @@ void main()
 
         private void Draw(RgbaFloat colour1, RgbaFloat colour2, RgbaFloat colour3, RgbaFloat colour4)
         {
-            Console.WriteLine("Drawing");
-            
             quadVertices = new []
             {
                 new VertexPositionColor(new Vector2(-.75f, .75f), colour1),
@@ -154,9 +153,24 @@ void main()
 
             var task = Task.Run(async () =>
             {
+                var timer = Stopwatch.StartNew();
+                var startTime = timer.ElapsedMilliseconds;
+                long lag = 0;
+                
                 while (true)
                 {
+                    var currentTime = timer.ElapsedMilliseconds;
+                    var elapsedTime = currentTime - startTime;
+                    startTime = currentTime;
+                    lag += elapsedTime;
+                    
+                    // add input
 
+                    while (lag >= TimeSpan.FromMilliseconds(16).Milliseconds)
+                    {
+                        Update(ref red, ref green, ref blue);
+                        lag -= TimeSpan.FromMilliseconds(16).Milliseconds;
+                    }
                     
                     Draw(new RgbaFloat(red / 64f, green / 64f, blue / 64f, 1f), 
                         new RgbaFloat(red / 64f, blue / 64f, green / 64f, 1f), 
@@ -164,37 +178,37 @@ void main()
                         new RgbaFloat(blue / 64f, red / 64f, green / 64f, 1f));
                     
                     token.ThrowIfCancellationRequested();
-                    
-                    if (red == 64)
-                    {
-                        if (green == 64)
-                        {
-                            if (blue == 64)
-                            {
-                                red = 0;
-                                green = 0;
-                                blue = 0;
-                            }
-                            else
-                            {
-                                blue += 1;
-                            }
-                        }
-                        else
-                        {
-                            green += 1;
-                        }
-                    }
-                    else
-                    {
-                        red += 1;
-                    }
-                    
-                    
-                    await Task.Delay(16); // 60 Frames a second
                 }
             }, token);
             
+        }
+
+        private static void Update(ref int red, ref int green, ref int blue)
+        {
+            if (red == 64)
+            {
+                if (green == 64)
+                {
+                    if (blue == 64)
+                    {
+                        red = 0;
+                        green = 0;
+                        blue = 0;
+                    }
+                    else
+                    {
+                        blue += 1;
+                    }
+                }
+                else
+                {
+                    green += 1;
+                }
+            }
+            else
+            {
+                red += 1;
+            }
         }
 
         public void Dispose()
