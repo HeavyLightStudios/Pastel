@@ -1,7 +1,7 @@
 <Project Sdk="MSBuild.Sdk.Extras/2.0.41">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;Xamarin.Mac20</TargetFrameworks>
+        <TargetFrameworks>Xamarin.Mac20</TargetFrameworks>
         <PackageId>Pastel.Core</PackageId>
         <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
         <LangVersion>7.3</LangVersion>
@@ -34,4 +34,21 @@
     <ItemGroup Condition="$(TargetFramework.StartsWith('NetStandard')) ">
         <Compile Include="Platform\**\*.netstandard.cs" />
     </ItemGroup> -->
+    <ItemGroup>
+      <Folder Include="Platform\Input\" />
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Update="Platform\Input\InputManager.shared.cs">
+        <SubType></SubType>
+      </Compile>
+      <Compile Update="Platform\Input\InputManager.mac.cs">
+        <SubType></SubType>
+      </Compile>
+      <Compile Update="Models\Button.cs">
+        <SubType></SubType>
+      </Compile>
+      <Compile Update="Models\PastelObject.cs">
+        <SubType></SubType>
+      </Compile>
+    </ItemGroup>
 </Project>
