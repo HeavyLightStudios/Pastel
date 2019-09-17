@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using OpenTK;
 using Veldrid;
 using Veldrid.SPIRV;
 
@@ -7,8 +8,11 @@ namespace Pastel.Core.Models
 {
     public abstract class PastelObject
     {
-        public Pipeline Pipeline;
+        public Vector2 Position;
+
+        protected Pipeline Pipeline;
         protected GraphicsDevice graphicsDevice;
+        protected Shader[] _shaders;
         protected const string VertexCode = @"
 #version 450
 
@@ -32,8 +36,6 @@ void main()
 {
     fsout_Color = fsin_Color;
 }";
-
-        private static Shader[] _shaders;
 
         public PastelObject()
         {
