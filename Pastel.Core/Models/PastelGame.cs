@@ -50,6 +50,7 @@ namespace Pastel.Core.Models
         {
             CommandList.Begin();
             CommandList.SetFramebuffer(GraphicsDevice.SwapchainFramebuffer);
+            CommandList.ClearColorTarget(0, RgbaFloat.Black);
 
             foreach (var pastelObject in PastelObjects)
             {
@@ -83,9 +84,6 @@ namespace Pastel.Core.Models
                     startTime = currentTime;
                     lag += elapsedTime;
 
-                    // add input
-                    CheckInput();
-
                     while (lag >= TimeSpan.FromMilliseconds(16).Milliseconds)
                     {
                     Update();
@@ -97,11 +95,6 @@ namespace Pastel.Core.Models
                     token.ThrowIfCancellationRequested();
                 }
             }, token);
-            
-        }
-
-        private void CheckInput()
-        {
             
         }
 
