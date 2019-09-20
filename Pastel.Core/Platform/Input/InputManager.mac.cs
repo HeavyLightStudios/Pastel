@@ -1,5 +1,4 @@
-﻿using System;
-using AppKit;
+﻿using AppKit;
 
 namespace Pastel.Core.Platform.Input
 {
@@ -13,16 +12,16 @@ namespace Pastel.Core.Platform.Input
                 {
                     case "w":
                         Buttons.Find(b => b.Name == "Up").pressed = true;
-                        break;
+                        return null;
                     case "s":
                         Buttons.Find(b => b.Name == "Down").pressed = true;
-                        break;
+                        return null;
                     case "a":
                         Buttons.Find(b => b.Name == "Left").pressed = true;
-                        break;
+                        return null;
                     case "d":
                         Buttons.Find(b => b.Name == "Right").pressed = true;
-                        break;
+                        return null;
                 }
                 return Event;
             });
@@ -33,16 +32,16 @@ namespace Pastel.Core.Platform.Input
                 {
                     case "w":
                         Buttons.Find(b => b.Name == "Up").pressed = false;
-                        break;
+                        return null;
                     case "s":
                         Buttons.Find(b => b.Name == "Down").pressed = false;
-                        break;
+                        return null;
                     case "a":
                         Buttons.Find(b => b.Name == "Left").pressed = false;
-                        break;
+                        return null;
                     case "d":
                         Buttons.Find(b => b.Name == "Right").pressed = false;
-                        break;
+                        return null;
                 }
                 return Event;
             });
