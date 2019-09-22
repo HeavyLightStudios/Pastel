@@ -17,6 +17,8 @@ namespace Pastel.Core.Platform.Graphics
                 options.SyncToVerticalBlank,
                 false);
             
+            
+            
             return GraphicsDevice.CreateMetal(options, swapchainDescription);
             //TODO: Add OpenGL Graphic Device & check GraphicDevice.IsBackendSupported
         }

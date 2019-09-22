@@ -90,7 +90,7 @@ void main()
 
         }
 
-        public virtual void Update() { }
+        public virtual void Update(float deltaTime) { }
 
         public virtual void Draw() { }
 

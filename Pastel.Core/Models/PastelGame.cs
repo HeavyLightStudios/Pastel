@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -44,24 +45,23 @@ namespace Pastel.Core.Models
         {
         }
 
-        
+
 
         private void Draw()
         {
             CommandList.Begin();
-            CommandList.SetFramebuffer(GraphicsDevice.SwapchainFramebuffer);
+            CommandList.SetFramebuffer(PastelGame.GraphicsDevice.SwapchainFramebuffer);
             CommandList.ClearColorTarget(0, RgbaFloat.Black);
-
+            
             foreach (var pastelObject in PastelObjects)
             {
                 pastelObject.Draw();
             }
-
-            CommandList.End();
+                
+            CommandList.End(); 
             GraphicsDevice.SubmitCommands(CommandList);
+            GraphicsDevice.WaitForIdle();
             GraphicsDevice.SwapBuffers();
-
-
         }
 
         public void Run()
@@ -71,38 +71,40 @@ namespace Pastel.Core.Models
            
             _inputManager = new InputManager();
 
-            var task = Task.Run(async () =>
+            Task.Run(() =>
             {
                 var timer = Stopwatch.StartNew();
                 var startTime = timer.ElapsedMilliseconds;
-                long lag = 0;
-                
+                float totalElapsedTime = 0;
+                var msPerUpdate = TimeSpan.FromMilliseconds(10).Milliseconds;
+
                 while (true)
                 {
                     var currentTime = timer.ElapsedMilliseconds;
                     var elapsedTime = currentTime - startTime;
-                    startTime = currentTime;
-                    lag += elapsedTime;
-
-                    while (lag >= TimeSpan.FromMilliseconds(16).Milliseconds)
-                    {
-                    Update();
-                        lag -= TimeSpan.FromMilliseconds(16).Milliseconds;
-                    }
-
-                    Draw();
                     
+                    startTime = currentTime;
+                    totalElapsedTime += elapsedTime;
+
+                    while (totalElapsedTime >= msPerUpdate)
+                    {
+                        Update(totalElapsedTime / msPerUpdate);
+                        totalElapsedTime -= msPerUpdate;
+                    }
+                    
+                    Draw();
+
                     token.ThrowIfCancellationRequested();
                 }
             }, token);
-            
+
         }
 
-        private static void Update()
+        private static void Update(float deltaTime)
         {
             foreach(var pastelObject in PastelObjects)
             {
-                pastelObject.Update();
+                pastelObject.Update(deltaTime);
             }
         }
 

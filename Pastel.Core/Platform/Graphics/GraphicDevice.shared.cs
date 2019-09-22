@@ -7,7 +7,14 @@ namespace Pastel.Core.Platform.Graphics
     {
         public GraphicsDevice Create(PastelWindow window)
         {
-            return CreateGraphicsdevice(new GraphicsDeviceOptions(), window);
+            GraphicsDeviceOptions deviceOptions = new GraphicsDeviceOptions(
+                debug: false,
+                swapchainDepthFormat: PixelFormat.R16_UNorm,
+                syncToVerticalBlank: true,
+                resourceBindingModel: ResourceBindingModel.Improved,
+                preferDepthRangeZeroToOne: true,
+                preferStandardClipSpaceYDirection: true);
+            return CreateGraphicsdevice(deviceOptions, window);
         }
     }
 }
