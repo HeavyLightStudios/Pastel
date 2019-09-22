@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Text;
 using System.Numerics;
+using System.Text;
 using Veldrid;
 using Veldrid.SPIRV;
 
@@ -8,11 +8,6 @@ namespace Pastel.Core.Models
 {
     public abstract class PastelObject
     {
-        public Vector2 Position;
-
-        protected Pipeline Pipeline;
-        protected GraphicsDevice graphicsDevice;
-        protected Shader[] _shaders;
         protected const string VertexCode = @"
 #version 450
 
@@ -26,6 +21,7 @@ void main()
     gl_Position = vec4(Position, 0, 1);
     fsin_Color = Color;
 }";
+
         protected const string FragmentCode = @"
 #version 450
 
@@ -37,10 +33,16 @@ void main()
     fsout_Color = fsin_Color;
 }";
 
-        public PastelObject()
+        private Shader[] _shaders;
+        protected readonly GraphicsDevice GraphicsDevice;
+
+        protected Pipeline Pipeline;
+        protected Vector2 Position;
+
+        protected PastelObject()
         {
             PastelGame.PastelObjects.Add(this);
-            graphicsDevice = PastelGame.GraphicsDevice;
+            GraphicsDevice = PastelGame.GraphicsDevice;
             Initialize();
         }
 
@@ -48,52 +50,59 @@ void main()
         {
             var factory = PastelGame.GraphicsDevice.ResourceFactory;
 
-            VertexLayoutDescription vertexLayout = new VertexLayoutDescription(
-                new VertexElementDescription("Position", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float2),
-                new VertexElementDescription("Color", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float4));
+            var vertexLayout = new VertexLayoutDescription(
+                new VertexElementDescription("Position", VertexElementSemantic.TextureCoordinate,
+                    VertexElementFormat.Float2),
+                new VertexElementDescription("Color", VertexElementSemantic.TextureCoordinate,
+                    VertexElementFormat.Float4));
 
-            ShaderDescription vertexShaderDesc = new ShaderDescription(
+            var vertexShaderDesc = new ShaderDescription(
                 ShaderStages.Vertex,
                 Encoding.UTF8.GetBytes(VertexCode),
                 "main");
-            ShaderDescription fragmentShaderDesc = new ShaderDescription(
+            var fragmentShaderDesc = new ShaderDescription(
                 ShaderStages.Fragment,
                 Encoding.UTF8.GetBytes(FragmentCode),
                 "main");
             _shaders = factory.CreateFromSpirv(vertexShaderDesc, fragmentShaderDesc);
 
-            GraphicsPipelineDescription pipelineDescription = new GraphicsPipelineDescription();
+            var pipelineDescription = new GraphicsPipelineDescription();
             pipelineDescription.BlendState = BlendStateDescription.SingleOverrideBlend;
 
             pipelineDescription.DepthStencilState = new DepthStencilStateDescription(
-                depthTestEnabled: true,
-                depthWriteEnabled: true,
-                comparisonKind: ComparisonKind.LessEqual);
+                true,
+                true,
+                ComparisonKind.LessEqual);
 
             pipelineDescription.RasterizerState = new RasterizerStateDescription(
-                cullMode: FaceCullMode.Back,
-                fillMode: PolygonFillMode.Solid,
-                frontFace: FrontFace.Clockwise,
-                depthClipEnabled: true,
-                scissorTestEnabled: false);
+                FaceCullMode.Back,
+                PolygonFillMode.Solid,
+                FrontFace.Clockwise,
+                true,
+                false);
 
             pipelineDescription.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
 
             pipelineDescription.ResourceLayouts = Array.Empty<ResourceLayout>();
 
             pipelineDescription.ShaderSet = new ShaderSetDescription(
-                vertexLayouts: new VertexLayoutDescription[] { vertexLayout },
-                shaders: _shaders);
+                new[] {vertexLayout},
+                _shaders);
 
             pipelineDescription.Outputs = PastelGame.GraphicsDevice.SwapchainFramebuffer.OutputDescription;
             Pipeline = factory.CreateGraphicsPipeline(pipelineDescription);
-
         }
 
-        public virtual void Update(float deltaTime) { }
+        public virtual void Update(float deltaTime)
+        {
+        }
 
-        public virtual void Draw() { }
+        public virtual void Draw()
+        {
+        }
 
-        public virtual void Dispose() { }
+        public virtual void Dispose()
+        {
+        }
     }
 }

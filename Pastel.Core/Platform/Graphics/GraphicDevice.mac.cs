@@ -1,7 +1,5 @@
-using System;
-using System.Runtime.InteropServices;
-using Veldrid;
 using Pastel.Core.Platform.Window;
+using Veldrid;
 
 namespace Pastel.Core.Platform.Graphics
 {
@@ -12,13 +10,12 @@ namespace Pastel.Core.Platform.Graphics
             var swapChainSource = getSwapchainSource(window);
             var swapchainDescription = new SwapchainDescription(
                 swapChainSource,
-                (uint)window.ScreenSize.Width, (uint)window.ScreenSize.Height,
+                (uint) window.ScreenSize.Width, (uint) window.ScreenSize.Height,
                 options.SwapchainDepthFormat,
                 options.SyncToVerticalBlank,
                 false);
-            
-            
-            
+
+
             return GraphicsDevice.CreateMetal(options, swapchainDescription);
             //TODO: Add OpenGL Graphic Device & check GraphicDevice.IsBackendSupported
         }

@@ -1,5 +1,5 @@
-using Veldrid;
 using Pastel.Core.Platform.Window;
+using Veldrid;
 
 namespace Pastel.Core.Platform.Graphics
 {
@@ -7,13 +7,13 @@ namespace Pastel.Core.Platform.Graphics
     {
         public GraphicsDevice Create(PastelWindow window)
         {
-            GraphicsDeviceOptions deviceOptions = new GraphicsDeviceOptions(
-                debug: false,
-                swapchainDepthFormat: PixelFormat.R16_UNorm,
-                syncToVerticalBlank: true,
-                resourceBindingModel: ResourceBindingModel.Improved,
-                preferDepthRangeZeroToOne: true,
-                preferStandardClipSpaceYDirection: true);
+            var deviceOptions = new GraphicsDeviceOptions(
+                false,
+                PixelFormat.R16_UNorm,
+                true,
+                ResourceBindingModel.Improved,
+                true,
+                true);
             return CreateGraphicsdevice(deviceOptions, window);
         }
     }
