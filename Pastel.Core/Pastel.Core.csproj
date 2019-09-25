@@ -1,12 +1,14 @@
 <Project Sdk="MSBuild.Sdk.Extras/2.0.41">
 
     <PropertyGroup>
-        <TargetFrameworks>Xamarin.Mac20</TargetFrameworks>
+        <TargetFrameworks>NetStandard2.1;Xamarin.Mac20;Xamarin.iOS10</TargetFrameworks>
         <PackageId>Pastel.Core</PackageId>
-        <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+        <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
         <LangVersion>7.3</LangVersion>
         <Nullable>disable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Configurations>Debug;Release;Debug | iPhone</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
     <PropertyGroup>
         <!-- As Default Compile items is off, exclusion of files need to be added to allow wildcard .cs files to be compiled --> 
@@ -24,34 +26,23 @@
       <PackageReference Include="Veldrid" Version="4.7.0" />
       <PackageReference Include="Veldrid.SPIRV" Version="1.0.12" />
     </ItemGroup>
-    <!--<ItemGroup>
+    <ItemGroup>
         <Compile Include="**\*.cs" Exclude="$(PlatformSpecificExclude)" />
         <Compile Include="Platform\**\*.shared.cs" />
     </ItemGroup>
     <ItemGroup Condition="$(TargetFramework.StartsWith('Xamarin.Mac')) ">
         <Compile Include="Platform\**\*.mac.cs" />
     </ItemGroup>
+    <ItemGroup Condition="$(TargetFramework.StartsWith('Xamarin.iOS')) ">
+        <Compile Include="Platform\**\*.ios.cs" />
+    </ItemGroup>
     <ItemGroup Condition="$(TargetFramework.StartsWith('NetStandard')) ">
         <Compile Include="Platform\**\*.netstandard.cs" />
-    </ItemGroup> -->
-    <ItemGroup>
-      <Folder Include="Platform\Input\" />
     </ItemGroup>
     <ItemGroup>
-      <Compile Update="Platform\Input\InputManager.shared.cs">
-        <SubType></SubType>
-      </Compile>
-      <Compile Update="Platform\Input\InputManager.mac.cs">
-        <SubType></SubType>
-      </Compile>
-      <Compile Update="Models\Button.cs">
-        <SubType></SubType>
-      </Compile>
-      <Compile Update="Models\PastelObject.cs">
-        <SubType></SubType>
-      </Compile>
-    </ItemGroup>
-    <ItemGroup>
+      <Reference Include="System.Numerics" Condition="'$(TargetFramework)' == 'xamarinmac20'" />
+      <Reference Include="System.Numerics" Condition="'$(TargetFramework)' == 'xamarinmac20'" />
       <Reference Include="System.Numerics" />
+      <Reference Include="Xamarin.iOS" />
     </ItemGroup>
 </Project>

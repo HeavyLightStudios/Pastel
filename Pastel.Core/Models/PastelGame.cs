@@ -12,7 +12,7 @@ namespace Pastel.Core.Models
 {
     public class PastelGame
     {
-        private static readonly Lazy<PastelWindow> PastelWindow = new Lazy<PastelWindow>(() =>
+        private static readonly Lazy<PastelWindow> pastelWindow = new Lazy<PastelWindow>(() =>
         {
             return new PastelWindow();
         });
@@ -23,7 +23,7 @@ namespace Pastel.Core.Models
         private static readonly Lazy<GraphicsDevice> graphicsDevice = new Lazy<GraphicsDevice>(() =>
         {
             var pastelGD = new GraphicDevice();
-            return pastelGD.Create(PastelWindow.Value);
+            return pastelGD.Create(pastelWindow.Value);
         });
 
         private static readonly Lazy<CommandList> commandList = new Lazy<CommandList>(() =>
@@ -35,7 +35,7 @@ namespace Pastel.Core.Models
 
         private InputManager _inputManager;
 
-
+        public static PastelWindow PastelWindow => pastelWindow.Value;
         public static List<PastelObject> PastelObjects => pastelObjects.Value;
         public static GraphicsDevice GraphicsDevice => graphicsDevice.Value;
         public static CommandList CommandList => commandList.Value;
