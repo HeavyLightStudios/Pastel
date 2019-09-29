@@ -1,20 +1,9 @@
-using System;
-using CoreGraphics;
-using Foundation;
 using UIKit;
 
 namespace Pastel.Core.Platform.Window
 {
     public sealed partial class PastelWindow : UIWindow
     {
-        public PastelWindow(IntPtr handle) : base(handle)
-        {
-        }
-
-        [Export("initWithCoder:")]
-        public PastelWindow(NSCoder coder) : base(coder)
-        {
-        }
 
         internal void CreateWindow()
         {

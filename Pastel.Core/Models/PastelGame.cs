@@ -33,7 +33,7 @@ namespace Pastel.Core.Models
         });
 
 
-        private InputManager _inputManager;
+        private InputManager _inputManager = new InputManager();
 
         public static PastelWindow PastelWindow => pastelWindow.Value;
         public static List<PastelObject> PastelObjects => pastelObjects.Value;
@@ -59,8 +59,6 @@ namespace Pastel.Core.Models
         {
             var tokenSource = new CancellationTokenSource();
             var token = tokenSource.Token;
-
-            _inputManager = new InputManager();
 
             Task.Run(() =>
             {

@@ -2,25 +2,20 @@ using System;
 using AppKit;
 using CoreGraphics;
 using Foundation;
+using Pastel.Core.Models;
 
 namespace Pastel.Core.Platform.Window
 {
     public sealed partial class PastelWindow : NSWindow
     {
-        public PastelWindow(IntPtr handle) : base(handle)
-        {
-        }
-
-        [Export("initWithCoder:")]
-        public PastelWindow(NSCoder coder) : base(coder)
-        {
-        }
-
         public PastelWindow(CGRect contentRect, NSWindowStyle aStyle, NSBackingStore bufferingType,
             bool deferCreation) :
             base(contentRect, aStyle, bufferingType, deferCreation)
         {
             ContentView = new NSView(Frame);
+            ScreenSize = new ScreenSize(1280, 720);
+            _title = "Pastel";
+            Fullscreen = false;
         }
 
         internal void CreateWindow()

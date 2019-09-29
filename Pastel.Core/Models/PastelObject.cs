@@ -33,10 +33,10 @@ void main()
     fsout_Color = fsin_Color;
 }";
 
-        private Shader[] _shaders;
+        private Shader[]? _shaders;
         protected readonly GraphicsDevice GraphicsDevice;
 
-        protected Pipeline Pipeline;
+        protected Pipeline? Pipeline;
         protected Vector2 Position;
 
         protected PastelObject()
