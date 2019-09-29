@@ -10,7 +10,7 @@ using Veldrid;
 
 namespace Pastel.Core.Models
 {
-    public class PastelGame
+    public abstract class PastelGame
     {
         private static readonly Lazy<PastelWindow> pastelWindow = new Lazy<PastelWindow>(() =>
         {
@@ -55,7 +55,7 @@ namespace Pastel.Core.Models
             GraphicsDevice.SwapBuffers();
         }
 
-        public void Run()
+        public virtual void Run()
         {
             var tokenSource = new CancellationTokenSource();
             var token = tokenSource.Token;
@@ -88,12 +88,12 @@ namespace Pastel.Core.Models
             }, token);
         }
 
-        private static void Update(float deltaTime)
+        public virtual void Update(float deltaTime)
         {
             foreach (var pastelObject in PastelObjects) pastelObject.Update(deltaTime);
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             foreach (var pastelObject in PastelObjects) pastelObject.Dispose();
             GraphicsDevice.Dispose();
