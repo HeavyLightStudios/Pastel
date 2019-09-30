@@ -43,6 +43,10 @@
       <Reference Include="System.Numerics" Condition="'$(TargetFramework)' == 'xamarinmac20'" />
       <Reference Include="System.Numerics" Condition="'$(TargetFramework)' == 'xamarinmac20'" />
       <Reference Include="System.Numerics" />
-      <Reference Include="Xamarin.iOS" />
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Update="Models\PastelScene.cs">
+        <SubType></SubType>
+      </Compile>
     </ItemGroup>
 </Project>

@@ -17,42 +17,34 @@ namespace Pastel.Core.Models
             return new PastelWindow();
         });
 
-        private static readonly Lazy<List<PastelObject>> pastelObjects =
+        private static Lazy<List<PastelObject>> gameObjects =
             new Lazy<List<PastelObject>>(() => new List<PastelObject>());
 
-        private static readonly Lazy<GraphicsDevice> graphicsDevice = new Lazy<GraphicsDevice>(() =>
+        private static Lazy<GraphicsDevice> graphicsDevice = new Lazy<GraphicsDevice>(() =>
         {
             var pastelGD = new GraphicDevice();
             return pastelGD.Create(pastelWindow.Value);
         });
 
-        private static readonly Lazy<CommandList> commandList = new Lazy<CommandList>(() =>
+        private static Lazy<CommandList> commandList = new Lazy<CommandList>(() =>
         {
             var factory = GraphicsDevice.ResourceFactory;
             return factory.CreateCommandList();
         });
 
+        private Stack<PastelScene> _sceneManager = new Stack<PastelScene>();
 
-        private InputManager _inputManager = new InputManager();
+        protected InputManager _inputManager = new InputManager();
 
         public static PastelWindow PastelWindow => pastelWindow.Value;
-        public static List<PastelObject> PastelObjects => pastelObjects.Value;
+        public static List<PastelObject> GameObjects => gameObjects.Value;
         public static GraphicsDevice GraphicsDevice => graphicsDevice.Value;
         public static CommandList CommandList => commandList.Value;
 
 
         private void Draw()
         {
-            CommandList.Begin();
-            CommandList.SetFramebuffer(GraphicsDevice.SwapchainFramebuffer);
-            CommandList.ClearColorTarget(0, RgbaFloat.Black);
-
-            foreach (var pastelObject in PastelObjects) pastelObject.Draw();
-
-            CommandList.End();
-            GraphicsDevice.SubmitCommands(CommandList);
-            GraphicsDevice.WaitForIdle();
-            GraphicsDevice.SwapBuffers();
+            _sceneManager.Peek().Draw();
         }
 
         public virtual void Run()
@@ -90,12 +82,32 @@ namespace Pastel.Core.Models
 
         public virtual void Update(float deltaTime)
         {
-            foreach (var pastelObject in PastelObjects) pastelObject.Update(deltaTime);
+            _sceneManager.Peek().Update(deltaTime);
+        }
+
+        public void AddScene(PastelScene scene)
+        {
+            _sceneManager.Push(scene);
+        }
+
+        public void RemoveScene()
+        {
+            _sceneManager.Pop();
+        }
+
+        public void ReplaceScene(PastelScene scene)
+        {
+            while(_sceneManager.Count > 0)
+            {
+                _sceneManager.Pop();
+            }
+
+            _sceneManager.Push(scene);
         }
 
         public virtual void Dispose()
         {
-            foreach (var pastelObject in PastelObjects) pastelObject.Dispose();
+            foreach (var pastelObject in GameObjects) pastelObject.Dispose();
             GraphicsDevice.Dispose();
         }
     }

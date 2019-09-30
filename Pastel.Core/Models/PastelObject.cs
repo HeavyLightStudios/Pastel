@@ -41,7 +41,6 @@ void main()
 
         protected PastelObject()
         {
-            PastelGame.PastelObjects.Add(this);
             GraphicsDevice = PastelGame.GraphicsDevice;
             Initialize();
         }
