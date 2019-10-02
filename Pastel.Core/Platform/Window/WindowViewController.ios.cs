@@ -18,7 +18,6 @@ namespace Pastel.Core.Platform.Window
         public WindowViewController(PastelWindow window)
         {
             // Construct the window from code here
-            
         }
     }
 }

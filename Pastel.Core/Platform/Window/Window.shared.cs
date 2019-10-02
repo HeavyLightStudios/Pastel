@@ -44,7 +44,7 @@ namespace Pastel.Core.Platform.Window
 
         public bool Fullscreen { get; set; }
 
-        public ScreenSize ScreenSize { get; set; }
+        public ScreenSize? ScreenSize { get; set; }
 
         public void Create()
         {

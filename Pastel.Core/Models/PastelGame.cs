@@ -10,57 +10,47 @@ using Veldrid;
 
 namespace Pastel.Core.Models
 {
-    public class PastelGame
+    public abstract class PastelGame
     {
         private static readonly Lazy<PastelWindow> pastelWindow = new Lazy<PastelWindow>(() =>
         {
             return new PastelWindow();
         });
 
-        private static readonly Lazy<List<PastelObject>> pastelObjects =
+        private static Lazy<List<PastelObject>> gameObjects =
             new Lazy<List<PastelObject>>(() => new List<PastelObject>());
 
-        private static readonly Lazy<GraphicsDevice> graphicsDevice = new Lazy<GraphicsDevice>(() =>
+        private static Lazy<GraphicsDevice> graphicsDevice = new Lazy<GraphicsDevice>(() =>
         {
             var pastelGD = new GraphicDevice();
             return pastelGD.Create(pastelWindow.Value);
         });
 
-        private static readonly Lazy<CommandList> commandList = new Lazy<CommandList>(() =>
+        private static Lazy<CommandList> commandList = new Lazy<CommandList>(() =>
         {
             var factory = GraphicsDevice.ResourceFactory;
             return factory.CreateCommandList();
         });
 
+        private Stack<PastelScene> _sceneManager = new Stack<PastelScene>();
+        private CancellationTokenSource _tokenSource = new CancellationTokenSource();
 
-        private InputManager _inputManager;
+        protected InputManager _inputManager = new InputManager();
 
         public static PastelWindow PastelWindow => pastelWindow.Value;
-        public static List<PastelObject> PastelObjects => pastelObjects.Value;
+        public static List<PastelObject> GameObjects => gameObjects.Value;
         public static GraphicsDevice GraphicsDevice => graphicsDevice.Value;
         public static CommandList CommandList => commandList.Value;
 
 
         private void Draw()
         {
-            CommandList.Begin();
-            CommandList.SetFramebuffer(GraphicsDevice.SwapchainFramebuffer);
-            CommandList.ClearColorTarget(0, RgbaFloat.Black);
-
-            foreach (var pastelObject in PastelObjects) pastelObject.Draw();
-
-            CommandList.End();
-            GraphicsDevice.SubmitCommands(CommandList);
-            GraphicsDevice.WaitForIdle();
-            GraphicsDevice.SwapBuffers();
+            _sceneManager.Peek().Draw();
         }
 
-        public void Run()
+        public virtual void Run()
         {
-            var tokenSource = new CancellationTokenSource();
-            var token = tokenSource.Token;
-
-            _inputManager = new InputManager();
+            var token = _tokenSource.Token;
 
             Task.Run(() =>
             {
@@ -69,7 +59,7 @@ namespace Pastel.Core.Models
                 float totalElapsedTime = 0;
                 var msPerUpdate = TimeSpan.FromMilliseconds(10).Milliseconds;
 
-                while (true)
+                while (!token.IsCancellationRequested)
                 {
                     var currentTime = timer.ElapsedMilliseconds;
                     var elapsedTime = currentTime - startTime;
@@ -85,19 +75,59 @@ namespace Pastel.Core.Models
 
                     Draw();
 
-                    token.ThrowIfCancellationRequested();
                 }
             }, token);
         }
 
-        private static void Update(float deltaTime)
+        public virtual void Update(float deltaTime)
         {
-            foreach (var pastelObject in PastelObjects) pastelObject.Update(deltaTime);
+            _sceneManager.Peek().Update(deltaTime);
         }
 
-        public void Dispose()
+        public void AddScene(PastelScene scene)
         {
-            foreach (var pastelObject in PastelObjects) pastelObject.Dispose();
+            foreach (var button in InputManager.Buttons)
+            {
+                button.Pressed = false;
+            }
+
+            _sceneManager.Push(scene);
+        }
+
+        public void RemoveScene()
+        {
+            foreach (var button in InputManager.Buttons)
+            {
+                button.Pressed = false;
+            }
+
+            _sceneManager.Pop();
+        }
+
+        public void ReplaceScene(PastelScene scene)
+        {
+            foreach (var button in InputManager.Buttons)
+            {
+                button.Pressed = false;
+            }
+
+            while (_sceneManager.Count > 0)
+            {
+                _sceneManager.Pop();
+            }
+
+            _sceneManager.Push(scene);
+        }
+
+        public void QuitGame()
+        {
+            _tokenSource.Cancel();
+            Dispose();
+        }
+
+        protected virtual void Dispose()
+        {
+            foreach (var pastelObject in GameObjects) pastelObject.Dispose();
             GraphicsDevice.Dispose();
         }
     }

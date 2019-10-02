@@ -22,6 +22,9 @@ namespace Pastel.Core.Platform.Input
                     case "d":
                         Buttons.Find(b => b.Name == "Right").Pressed = true;
                         return null;
+                    case "l":
+                        Buttons.Find(b => b.Name == "Menu").Pressed = true;
+                        return null;
                 }
 
                 return Event;
@@ -42,6 +45,9 @@ namespace Pastel.Core.Platform.Input
                         return null;
                     case "d":
                         Buttons.Find(b => b.Name == "Right").Pressed = false;
+                        return null;
+                    case "l":
+                        Buttons.Find(b => b.Name == "Menu").Pressed = false;
                         return null;
                 }
 
