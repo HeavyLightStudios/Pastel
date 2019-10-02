@@ -10,11 +10,16 @@ namespace Pastel.Core.Models
         protected List<PastelObject> SceneObjects = new List<PastelObject>();
         protected RgbaFloat BackgroundColour = RgbaFloat.Black;
 
+        public PastelScene()
+        {
+        }
+
         public void Update(float deltaTime)
         {
-            SceneUpdate();
             foreach (var gameObject in PastelGame.GameObjects) gameObject.Update(deltaTime);
             foreach (var sceneObject in SceneObjects) sceneObject.Update(deltaTime);
+
+            SceneUpdate();
         }
 
         public void Draw()

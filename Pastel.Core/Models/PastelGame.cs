@@ -33,6 +33,7 @@ namespace Pastel.Core.Models
         });
 
         private Stack<PastelScene> _sceneManager = new Stack<PastelScene>();
+        private CancellationTokenSource _tokenSource = new CancellationTokenSource();
 
         protected InputManager _inputManager = new InputManager();
 
@@ -49,8 +50,7 @@ namespace Pastel.Core.Models
 
         public virtual void Run()
         {
-            var tokenSource = new CancellationTokenSource();
-            var token = tokenSource.Token;
+            var token = _tokenSource.Token;
 
             Task.Run(() =>
             {
@@ -59,7 +59,7 @@ namespace Pastel.Core.Models
                 float totalElapsedTime = 0;
                 var msPerUpdate = TimeSpan.FromMilliseconds(10).Milliseconds;
 
-                while (true)
+                while (!token.IsCancellationRequested)
                 {
                     var currentTime = timer.ElapsedMilliseconds;
                     var elapsedTime = currentTime - startTime;
@@ -75,7 +75,6 @@ namespace Pastel.Core.Models
 
                     Draw();
 
-                    token.ThrowIfCancellationRequested();
                 }
             }, token);
         }
@@ -87,17 +86,32 @@ namespace Pastel.Core.Models
 
         public void AddScene(PastelScene scene)
         {
+            foreach (var button in InputManager.Buttons)
+            {
+                button.Pressed = false;
+            }
+
             _sceneManager.Push(scene);
         }
 
         public void RemoveScene()
         {
+            foreach (var button in InputManager.Buttons)
+            {
+                button.Pressed = false;
+            }
+
             _sceneManager.Pop();
         }
 
         public void ReplaceScene(PastelScene scene)
         {
-            while(_sceneManager.Count > 0)
+            foreach (var button in InputManager.Buttons)
+            {
+                button.Pressed = false;
+            }
+
+            while (_sceneManager.Count > 0)
             {
                 _sceneManager.Pop();
             }
@@ -105,7 +119,13 @@ namespace Pastel.Core.Models
             _sceneManager.Push(scene);
         }
 
-        public virtual void Dispose()
+        public void QuitGame()
+        {
+            _tokenSource.Cancel();
+            Dispose();
+        }
+
+        protected virtual void Dispose()
         {
             foreach (var pastelObject in GameObjects) pastelObject.Dispose();
             GraphicsDevice.Dispose();
