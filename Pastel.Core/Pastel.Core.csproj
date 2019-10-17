@@ -25,6 +25,7 @@
     <ItemGroup>
       <PackageReference Include="Veldrid" Version="4.7.0" />
       <PackageReference Include="Veldrid.SPIRV" Version="1.0.12" />
+      <PackageReference Include="Veldrid.ImageSharp" Version="4.7.0" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="**\*.cs" Exclude="$(PlatformSpecificExclude)" />
@@ -48,5 +49,30 @@
       <Compile Update="Models\PastelScene.cs">
         <SubType></SubType>
       </Compile>
+      <Compile Update="Models\Texture2D.cs">
+        <SubType></SubType>
+      </Compile>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Shaders\" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Remove="Shaders\Sprite-fragment.glsl" />
+      <None Remove="Shaders\Sprite-vertex.glsl" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Update="character.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="Shaders\Sprite-fragment.glsl">
+        <SubType></SubType>
+        <Generator></Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Shaders\Sprite-vertex.glsl">
+        <SubType></SubType>
+        <Generator></Generator>
+      </EmbeddedResource>
     </ItemGroup>
 </Project>

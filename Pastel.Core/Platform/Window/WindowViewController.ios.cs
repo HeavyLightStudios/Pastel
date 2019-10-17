@@ -18,6 +18,13 @@ namespace Pastel.Core.Platform.Window
         public WindowViewController(PastelWindow window)
         {
             // Construct the window from code here
+            window.MakeKeyAndVisible();
+        }
+
+        public override void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+            View.BackgroundColor = UIColor.Green;
         }
     }
 }

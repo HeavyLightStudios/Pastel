@@ -23,11 +23,11 @@ namespace Pastel.Core.Platform.Window
                 ScreenSize.Width = (int)UIScreen.MainScreen.Bounds.Width;
             }
 
-            var windowController = new WindowViewController(this);
+            var windowController = new WindowViewController(Handle);
 
             windowController.Title = _title;
             RootViewController = windowController;
-            MakeKeyAndVisible();
+            
         }
     }
 }
