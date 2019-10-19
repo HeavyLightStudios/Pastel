@@ -69,10 +69,12 @@
       <EmbeddedResource Include="Shaders\Sprite-fragment.glsl">
         <SubType></SubType>
         <Generator></Generator>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
       <EmbeddedResource Include="Shaders\Sprite-vertex.glsl">
         <SubType></SubType>
         <Generator></Generator>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
     </ItemGroup>
 </Project>
